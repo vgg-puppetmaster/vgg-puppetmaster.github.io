@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Our model, Puppet-Master, can synthesize nuanced part-level object dynamics. Trained on synthetic data, at inference time it generalizes to real data.">
+  <meta name="keywords" content="Puppet-Master, Motion, Diffusion Models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Puppet-Master: Scaling Interactive Video Generation as a Motion Prior for Part-Level Dynamics</title>
+
+  <meta property="og:image" content="resources/og_image" />
+  <meta property="og:title"
+    content="Puppet-Master: Scaling Interactive Video Generation as a Motion Prior for Part-Level Dynamics" />
+  <meta property="og:description"
+    content="Our model, Puppet-Master, can synthesize nuanced part-level object dynamics. Trained on synthetic data, at inference time it generalizes to real data." />
+  <!-- Twitter automatically scrapes this. Go to https://cards-dev.twitter.com/validator?
+      if you update and want to force Twitter to re-scrape. -->
+  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:title"
+    content="Puppet-Master: Scaling Interactive Video Generation as a Motion Prior for Part-Level Dynamics" />
+  <meta property="twitter:description"
+    content="Our model, Puppet-Master, can synthesize nuanced part-level object dynamics. Trained on synthetic data, at inference time it generalizes to real data." />
+  <!-- <meta property="twitter:image" content="resources/og_image" /> -->
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VFNFH9CKNX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-VFNFH9CKNX');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="https://unpkg.com/interactjs/dist/interact.min.js"></script>
+
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <!-- <script src="./static/js/index.js"></script> -->
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+
+        <br>
+
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-3 publication-title" style="font-size: 2.2rem;">
+              Puppet-Master: Scaling Interactive Video Generation as a Motion Prior for Part-Level Dynamics</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://ruiningli.com/">Ruining Li</a></span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="author-block">
+                <a href="https://chuanxiaz.com/">Chuanxia Zheng</a></span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="author-block">
+                <a href="https://chrirupp.github.io/">Christian Rupprecht</a>
+              </span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="author-block">
+                <a href="https://www.robots.ox.ac.uk/~vedaldi/">Andrea Vedaldi</a>
+              </span>&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Visual Geometry Group, University of Oxford</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+
+            <!-- <div class="is-size-5 publication-authors">
+              <span class="author-block">Arxiv Preprint</span>
+            </div> -->
+
+            <!-- PDF Link. -->
+            <span class="link-block">
+              <!-- <a href="https://arxiv.org/abs/2403.15382" class="external-link button is-normal is-rounded is-dark"> -->
+              <a href="#" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                  <i class="fas fa-file-pdf"></i>
+                </span>
+                <span>Paper (coming soon)</span>
+              </a>
+            </span>
+
+            <!-- Demo Link. -->
+            <!-- <span class="link-block">
+              <a href="https://huggingface.co/spaces/rayli/DragAPart"
+                class="external-link button is-normal is-rounded is-dark disabled">
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Demo</span>
+              </a>
+            </span> -->
+
+            <!-- Code Link. -->
+            <span class="link-block">
+              <a href="https://github.com/RuiningLi/puppet-master"
+                class="external-link button is-normal is-rounded is-dark disabled">
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Code</span>
+              </a>
+            </span>
+
+            <!-- Data Link. -->
+            <span class="link-block">
+              <a href="https://github.com/RuiningLi/puppet-master/tree/main/data"
+                class="external-link button is-normal is-rounded is-dark disabled">
+                <span class="icon">
+                  <i class="fas fa-table"></i>
+                </span>
+                <span>Data</span>
+              </a>
+            </span>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Puppet-Master is an interactive video generator that, given a single image and a set of drags as input,
+              can synthesize a video depicting nuanced part-level dynamics that correspond to the drag interactions.
+            </p>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Examples</h2>
+        </div>
+      </div>
+
+      <div class="content has-text-centered is-centered">
+        <p>
+          All our examples are generated with a <b>single</b> model!
+        </p>
+      </div>
+
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h3 class="title is-4">Man-Made Objects</h3>
+          <div class="content has-text-centered">
+            <img src='resources/manmade.gif' width="1200">
+          </div>
+          <br>
+          <h3 class="title is-4">Animals</h3>
+          <div class="content has-text-centered">
+            <img src='resources/animal.gif' width="1200">
+          </div>
+          <br>
+          <h3 class="title is-4">Humans</h3>
+          <div class="content has-text-centered">
+            <img src='resources/human.gif' width="1200">
+          </div>
+          <br>
+        </div>
+      </div>
+  </section>
+
+
+
+  <!-- <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <td style="vertical-align:middle">
+          <img src='resources/teaser.png'>
+        </td>
+        <h2 class="subtitle">
+          
+        </h2>
+      </div>
+
+      <br>
+
+      <div class="hero-body">
+        <td style="vertical-align:middle">
+          <a href="https://huggingface.co/spaces/rayli/DragAPart">
+            <img src='resources/demo-screenshot.png'>
+          </a>
+        </td>
+        <h2 class="subtitle">
+          <p style="text-align: center">Check this <a href="https://huggingface.co/spaces/rayli/DragAPart">Gradio
+              Demo page</a> to interact with your favorite articulated objects!</p>
+        </h2>
+      </div>
+
+    </div>
+  </section> -->
+
+  <!-- <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Highlights</h2>
+          <div class="content has-text-justified">
+            <p>
+              We introduce DragAPart, a method that, given an image and a set of drags as input,
+              can generate a new image of the same object in a new state, compatible with the action of the drags.
+              Differently from prior works that focused on repositioning objects, DragAPart predicts part-level
+              interactions, such as opening and closing a drawer.
+              We study this problem as a proxy for learning a generalist motion model, not restricted to a specific
+              kinematic structure or object category.
+              To this end, we start from a pre-trained image generator and fine-tune it on a new synthetic dataset,
+              Drag-a-Move, which we introduce.
+              Combined with a new encoding for the drags and dataset randomization, the new model generalizes well to
+              real images and different categories.
+              Compared to prior motion-controlled generators, we demonstrate much better part-level motion
+              understanding.
+            </p>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width has-text-centered">
+          <h2 class="title is-3">Examples: Manipulate Real Images from Amazon Berkeley Objects and CO3D</h2>
+
+          <div class="content has-text-justified">
+            <p>
+              Our model is capable of preserving fine-grained texture details,
+              generating reasonable shades,
+              handling thin structures,
+              compositing multi-part motion,
+              "dreaming" up internal structures of the object,
+              and generalizing to categories not seen during training.
+            </p>
+          </div>
+
+          <div class="content has-text-centered">
+            <img src='resources/result.png' width="1000">
+          </div>
+          <br>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="Details">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Technical Details</h2>
+          <td style="padding:20px;width:35%;vertical-align:middle">
+            <img src='resources/overview.png' width="1000">
+          </td>
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <div class="content has-text-justified">
+            <p>
+              <b>(a)</b> Our model takes as input a single RGB image and one or more drags, and generates a second image
+              that reflects the effect of the drags.
+              <b>(b)</b> We propose a novel flow encoder, which enables us to inject the motion control into the latent
+              diffusion model at different resolutions more efficiently. Instead of representing the sparse drags as a
+              flow image and downsizing it with a convolutional network, we assign different channels to different drags
+              and use separate channels to encode the drag source and the drag termination.
+              <b>(c)</b> At inference time, our model generalizes to real data, synthesizing physically-plausible
+              part-level dynamics.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <!-- <pre><code>@article{li2024dragapart,
+  title     = {DragAPart: Learning a Part-Level Motion Prior for Articulated Objects},
+  author    = {Li, Ruining and Zheng, Chuanxia and Rupprecht, Christian and Vedaldi, Andrea},
+  journal   = {arXiv preprint arXiv:2403.15382},
+  year      = {2024}
+}</code></pre> -->
+    </div>
+  </section>
+
+  <section class="section" id="Acknowledgements">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Acknowledgements</h2>
+      <p>
+        We would like to thank <a href="https://lukemelas.github.io/">Luke Melas-Kyriazi</a>, <a
+          href="https://shallowtoil.github.io/">Jinghao Zhou</a>, <a href="https://silent-chen.github.io/">Minghao
+          Chen</a>, and <a href="https://scholar.google.com/citations?user=cDMqaTYAAAAJ&hl=en">Junyu Xie</a> for
+        insightful discussions.
+        This work is in part supported by a Toshiba Research Studentship and ERC-CoG UNION 101001212.
+      </p>
+    </div>
+  </section>
+
+  <!-- <section class="section" id="References">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Relevant Work</h2>
+      <a href="https://dove3d.github.io/">Dove: Learning Deformable 3D Objects by Watching Videos. <em>IJCV
+          2023</em>.</a><br />
+      <a href="https://3dmagicpony.github.io/">MagicPony: Learning Articulated 3D Animals in the Wild. <em>CVPR
+          2023</em>.</a><br />
+      <a href="https://farm3d.github.io/">Farm3D: Learning Articulated 3D Animals by Distilling 2D Diffusion. <em>3DV
+          2024</em>.</a><br />
+      <a href="https://keqiangsun.github.io/projects/ponymation/">Ponymation: Learning 3D Animal Motions from Unlabeled
+        Online Videos. <em>Arxiv 2023</em>.</a><br />
+      <a href="https://mehmetaygun.github.io/saor">SAOR: Single-View Articulated Object Reconstruction. <em>Arxiv
+          2023</em>.</a><br />
+      <a href="https://chhankyao.github.io/lassie/">LASSIE: Learning Articulated Shape from Sparse Image Ensemble via 3D
+        Part Discovery. <em>NeurIPS 2022</em>.</a><br />
+      <a href="https://chhankyao.github.io/hi-lassie/">Hi-LASSIE: High-Fidelity Articulated Shape and Skeleton Discovery
+        from Sparse Image Ensemble. <em>CVPR 2023</em>.</a><br />
+      <a href="https://chhankyao.github.io/artic3d/">ARTIC3D: Learning Robust Articulated 3D Shapes from Noisy Web Image
+        Collections. <em>NeurIPS 2023</em>.</a><br />
+      <a href="https://banmo-www.github.io/index.html">BANMo: Building Animatable 3D Neural Models from Many Casual
+        Videos. <em>CVPR 2022</em>.</a><br />
+      <a href="https://gengshan-y.github.io/rac-www/">RAC: Reconstructing Animatable Categories from Videos. <em>CVPR
+          2023</em>.</a><br />
+    </div>
+  </section> -->
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This webpage template is adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
+              and <a href="https://dragapart.github.io/">DragAPart</a>, under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    initComparisons();
+    window.addEventListener('resize', resetComparisons);
+    linkVideos(0);
+    linkVideos(1);
+  </script>
+  <script type="text/javascript" src="./static/js/slick.min.js"></script>
+  <script src="./static/js/main.js"></script>
+
+</body>
+
+</html>
