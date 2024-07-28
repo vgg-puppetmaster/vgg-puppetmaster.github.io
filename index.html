@@ -100,7 +100,7 @@
                 <span class="icon">
                   <i class="fas fa-file-pdf"></i>
                 </span>
-                <span>Paper (coming soon)</span>
+                <span>Paper</span>
               </a>
             </span>
 
@@ -147,19 +147,18 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column is-full-width">
-          <h2 class="title is-3">Abstract</h2>
-          <div class="content has-text-justified">
-            <p>
-              Puppet-Master is an interactive video generator that, given a single image and a set of drags as input,
-              can synthesize a video depicting nuanced part-level dynamics that correspond to the drag interactions.
-            </p>
-          </div>
+          <h2 class="title is-3">TL;DR</h2>
         </div>
       </div>
-      <br>
+
+      <div class="content has-text-justified">
+        <p>
+          <b>Puppet-Master</b> generates realistic <i>part-level</i> motion in the form of a video, conditioned on an
+          input image and a few drag interactions, serving as a motion prior for part-level dynamics.
+        </p>
+      </div>
     </div>
   </section>
-
 
   <section class="section">
     <div class="container is-max-desktop">
@@ -196,55 +195,26 @@
       </div>
   </section>
 
-
-
-  <!-- <section class="hero teaser">
-    <div class="container is-max-desktop">
-      <div class="hero-body">
-        <td style="vertical-align:middle">
-          <img src='resources/teaser.png'>
-        </td>
-        <h2 class="subtitle">
-          
-        </h2>
-      </div>
-
-      <br>
-
-      <div class="hero-body">
-        <td style="vertical-align:middle">
-          <a href="https://huggingface.co/spaces/rayli/DragAPart">
-            <img src='resources/demo-screenshot.png'>
-          </a>
-        </td>
-        <h2 class="subtitle">
-          <p style="text-align: center">Check this <a href="https://huggingface.co/spaces/rayli/DragAPart">Gradio
-              Demo page</a> to interact with your favorite articulated objects!</p>
-        </h2>
-      </div>
-
-    </div>
-  </section> -->
-
-  <!-- <section class="section">
+  <section class="section">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column is-full-width">
-          <h2 class="title is-3">Highlights</h2>
+          <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-              We introduce DragAPart, a method that, given an image and a set of drags as input,
-              can generate a new image of the same object in a new state, compatible with the action of the drags.
-              Differently from prior works that focused on repositioning objects, DragAPart predicts part-level
-              interactions, such as opening and closing a drawer.
-              We study this problem as a proxy for learning a generalist motion model, not restricted to a specific
-              kinematic structure or object category.
-              To this end, we start from a pre-trained image generator and fine-tune it on a new synthetic dataset,
-              Drag-a-Move, which we introduce.
-              Combined with a new encoding for the drags and dataset randomization, the new model generalizes well to
-              real images and different categories.
-              Compared to prior motion-controlled generators, we demonstrate much better part-level motion
-              understanding.
+              We present <b>Puppet-Master</b>, an interactive video generative model that can serve as a motion prior
+              for part-level dynamics. At test time, given a single image and a sparse set of motion trajectories (i.e.,
+              drags), Puppet-Master can synthesize a video depicting realistic part-level motion faithful to the given
+              drag interactions. This is achieved by fine-tuning a large-scale pre-trained video diffusion model, for
+              which we propose a new conditioning architecture to effectively inject the dragging control. More
+              importantly, we introduce the all-to-first attention mechanism, a drop-in replacement for the widely
+              adopted spatial attention modules, which significantly improves generation quality by addressing the
+              appearance and background issues in existing models. Unlike other motion-conditioned video generators that
+              are trained on in-the-wild videos and mostly move an entire object, Puppet-Master is learned from
+              Objaverse-Animation-HQ, a new dataset of curated part-level motion clips. We propose a strategy to
+              automatically filter out sub-optimal animations and augment the synthetic renderings with meaningful
+              motion trajectories. Puppet-Master generalizes well to real images across various categories, and
+              outperforms existing methods in a zero-shot manner on a real-world benchmark.
             </p>
           </div>
         </div>
@@ -255,39 +225,18 @@
 
   <section class="section">
     <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column is-full-width has-text-centered">
-          <h2 class="title is-3">Examples: Manipulate Real Images from Amazon Berkeley Objects and CO3D</h2>
-
-          <div class="content has-text-justified">
-            <p>
-              Our model is capable of preserving fine-grained texture details,
-              generating reasonable shades,
-              handling thin structures,
-              compositing multi-part motion,
-              "dreaming" up internal structures of the object,
-              and generalizing to categories not seen during training.
-            </p>
-          </div>
-
-          <div class="content has-text-centered">
-            <img src='resources/result.png' width="1000">
-          </div>
-          <br>
-
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="section" id="Details">
-    <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column is-full-width">
           <h2 class="title is-3">Technical Details</h2>
+        </div>
+      </div>
+
+      <!-- Architecture -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h3 class="title is-4">Architecture</h3>
           <td style="padding:20px;width:35%;vertical-align:middle">
-            <img src='resources/overview.png' width="1000">
+            <img src='resources/architecture.png' width="1000">
           </td>
         </div>
       </div>
@@ -295,34 +244,61 @@
         <div class="column is-full-width">
           <div class="content has-text-justified">
             <p>
-              <b>(a)</b> Our model takes as input a single RGB image and one or more drags, and generates a second image
-              that reflects the effect of the drags.
-              <b>(b)</b> We propose a novel flow encoder, which enables us to inject the motion control into the latent
-              diffusion model at different resolutions more efficiently. Instead of representing the sparse drags as a
-              flow image and downsizing it with a convolutional network, we assign different channels to different drags
-              and use separate channels to encode the drag source and the drag termination.
-              <b>(c)</b> At inference time, our model generalizes to real data, synthesizing physically-plausible
-              part-level dynamics.
+              <b>Puppet-Master</b> is built on Stable Video Diffusion (SVD). To enable precise drag conditioning, we
+              first modify the original latent video diffusion architecture by <b>(A)</b> adding adaptive layer
+              normalization modules to modulate the internal diffusion features and <b>(B)</b> adding cross attention
+              with <i>drag tokens</i>. Furthermore, to ensure high-quality appearance and background, we introduce
+              <b>(C)</b> <i>all-to-first</i> spatial attention, a drop-in replacement for the spatial self-attention
+              modules, which attends every noised video frame with the first frame.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h3 class="title is-4">Data</h3>
+          <td style="padding:20px;width:35%;vertical-align:middle">
+            <img src='resources/data.png' width="1000">
+          </td>
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <div class="content has-text-justified">
+            <p>
+              <b>Puppet-Master</b> is trained on a combined dataset of Drag-a-Move and <b>Objaverse-Animation-HQ</b>. We
+              first curate high-quality animated 3D models from Objaverse in two steps: in the first step, we extract
+              important features for each animation and fit a random forest classifier to decide whether an animation
+              should be included in the training set, yielding a dataset of 16K animated models which we dub
+              <b>Objaverse-Animation</b>; in the second step, we prompt GPT-4V to further filter out sub-optimal
+              animations, yielding a higher-quality dataset <b>Objaverse-Animation-HQ</b> consisting of 10K animated
+              models.
+              We augment the animated models with meaningful sparse motion trajectories to train our drag-conditioned
+              video generator.
+              We empirically show that training on Objaverse-Animation-HQ leads to a much better model than training on
+              Objaverse-Animation, justifying the extra efforts in data curation.
             </p>
           </div>
         </div>
       </div>
     </div>
-  </section> -->
+  </section>
 
   <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
-      <!-- <pre><code>@article{li2024dragapart,
-  title     = {DragAPart: Learning a Part-Level Motion Prior for Articulated Objects},
+      <pre><code>@article{li2024puppetmaster,
+  title     = {Puppet-Master: Scaling Interactive Video Generation as a Motion Prior for Part-Level Dynamics},
   author    = {Li, Ruining and Zheng, Chuanxia and Rupprecht, Christian and Vedaldi, Andrea},
-  journal   = {arXiv preprint arXiv:2403.15382},
+  journal   = {arXiv preprint},
   year      = {2024}
-}</code></pre> -->
+}</code></pre>
     </div>
   </section>
 
-  <section class="section" id="Acknowledgements">
+  <!-- <section class="section" id="Acknowledgements">
     <div class="container is-max-desktop content">
       <h2 class="title">Acknowledgements</h2>
       <p>
@@ -333,7 +309,7 @@
         This work is in part supported by a Toshiba Research Studentship and ERC-CoG UNION 101001212.
       </p>
     </div>
-  </section>
+  </section> -->
 
   <!-- <section class="section" id="References">
     <div class="container is-max-desktop content">
